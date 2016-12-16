@@ -2,8 +2,8 @@
 
 namespace MoreSparetime\WordPress\PluginBuilder\Admin;
 
-use AndreasGlaser\HelpersHtml\FormHelper;
-use AndreasGlaser\HelpersHtmlHelper;
+use AndreasGlaser\Helpers\Html\FormHelper;
+use AndreasGlaser\Helpers\HtmlHelper;
 use MoreSparetime\WordPress\PluginBuilder\Admin\Settings\Section;
 use MoreSparetime\WordPress\PluginBuilder\AttachableInterface;
 

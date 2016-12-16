@@ -32,6 +32,16 @@ class Shortcode implements AttachableInterface
      */
     protected $callback;
 
+    /**
+     * Shortcode constructor.
+     *
+     * @param \MoreSparetime\WordPress\PluginBuilder\Plugin $plugin
+     * @param string                                        $slug
+     * @param callable                                      $callback
+     * @param array                                         $defaults
+     *
+     * @author Andreas Glaser
+     */
     public function __construct(Plugin $plugin, $slug, $callback, array $defaults = [])
     {
         $this->setPlugin($plugin);

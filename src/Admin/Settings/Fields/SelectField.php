@@ -2,7 +2,7 @@
 
 namespace MoreSparetime\WordPress\PluginBuilder\Admin\Settings\Fields;
 
-use AndreasGlaser\HelpersHtml\FormHelper;
+use AndreasGlaser\Helpers\Html\FormHelper;
 use MoreSparetime\WordPress\PluginBuilder\Admin\Settings\Field;
 
 /**
@@ -14,10 +14,15 @@ use MoreSparetime\WordPress\PluginBuilder\Admin\Settings\Field;
 class SelectField extends Field
 {
     /**
-     * @var
+     * @var array
      */
     protected $options;
 
+    /**
+     * @param array $options
+     *
+     * @author Andreas Glaser
+     */
     public function setOptions(array $options)
     {
         $this->options = $options;

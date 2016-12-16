@@ -106,7 +106,6 @@ class Section implements AttachableInterface
     public function attachHooks()
     {
         add_action('admin_init', function () {
-
             add_settings_section(
                 $this->getSlug(),
                 $this->title,

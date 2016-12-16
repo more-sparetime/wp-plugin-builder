@@ -41,10 +41,10 @@ class Ajax implements AttachableInterface
      * Ajax constructor.
      *
      * @param \MoreSparetime\WordPress\PluginBuilder\PluginInterface $plugin
-     * @param                                                        $slug
-     * @param                                                        $callback
+     * @param string                                                 $slug
+     * @param callable                                               $callback
      * @param bool                                                   $internal
-     * @param bool                                                   $external
+     * @param                                                        bool
      *
      * @author Andreas Glaser
      */

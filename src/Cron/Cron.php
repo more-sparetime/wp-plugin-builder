@@ -32,6 +32,16 @@ class Cron implements AttachableInterface
      */
     protected $recurrence;
 
+    /**
+     * Cron constructor.
+     *
+     * @param \MoreSparetime\WordPress\PluginBuilder\Plugin $plugin
+     * @param string                                        $slug
+     * @param callable                                      $callback
+     * @param string                                        $recurrence
+     *
+     * @author Andreas Glaser
+     */
     public function __construct(Plugin $plugin, $slug, $callback, $recurrence = 'hourly')
     {
         $this->setPlugin($plugin);

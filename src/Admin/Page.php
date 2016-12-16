@@ -39,6 +39,17 @@ class Page
      */
     protected $capability;
 
+    /**
+     * Page constructor.
+     *
+     * @param \MoreSparetime\WordPress\PluginBuilder\PluginInterface $plugin
+     * @param string                                                 $slug
+     * @param string                                                 $title
+     * @param callable|null                                          $callback
+     * @param string                                                 $capability
+     *
+     * @author Andreas Glaser
+     */
     public function __construct(PluginInterface $plugin, $slug, $title, $callback = null, $capability = 'manage_options')
     {
         $this->setPlugin($plugin);
