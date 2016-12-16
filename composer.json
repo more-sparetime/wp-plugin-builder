@@ -1,0 +1,48 @@
+{
+  "name": "andreas-glaser/wp-plugin-builder",
+  "description": "Optimized, object oriented WordPress plugin builder library",
+  "keywords": [
+    "php",
+    "wordpress",
+    "plugin",
+    "framework"
+  ],
+  "homepage": "https://github.com/andreas-glaser/wp-plugin-builder",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andreas Glaser",
+      "email": "andreas.c.glaser@gmail.com",
+      "homepage": "http://andreas.glaser.me"
+    }
+  ],
+  "require": {
+    "php": "^5.5||^7",
+    "andreas-glaser/php-helpers": "^1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5",
+    "symfony/var-dumper": "@stable",
+    "doctrine/data-fixtures": "@stable"
+  },
+  "suggest": {},
+  "config": {
+    "bin-dir": "bin"
+  },
+  "autoload": {
+    "psr-4": {
+      "AndreasGlaser\\WordPress\\PluginBuilder\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AndreasGlaser\\WordPress\\PluginBuilder\\": "tests/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.1-dev"
+    }
+  }
+}
