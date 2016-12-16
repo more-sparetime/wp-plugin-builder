@@ -54,7 +54,7 @@ class Page
     {
         $this->setPlugin($plugin);
         $this->setSlug($slug);
-        $this->title = $title;
+        $this->title = $plugin->t($title);
 
         if (!$controller) {
             $controller = [$this, 'render'];

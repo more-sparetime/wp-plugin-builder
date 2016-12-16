@@ -90,6 +90,8 @@ class Plugin implements PluginInterface, AttachableInterface
             if (!is_dir($this->config['views_dir'])) {
                 throw new \Exception(sprintf('"%s" is not a directory', $this->config['views_dir']));
             }
+
+            PHPView::setGlobal('plugin', $this);
         }
     }
 
@@ -569,4 +571,42 @@ class Plugin implements PluginInterface, AttachableInterface
         return $this->getPluginPath() . DIRECTORY_SEPARATOR . $this->getSlug() . '.php';
     }
 
+    /**
+     * @param $string
+     *
+     * @return string|void
+     * @author Andreas Glaser
+     */
+    public function t($string)
+    {
+        return __($string, $this->getSlug());
+    }
+
+    /**
+     * Translate strings with variables e.g.
+     *
+     * print $plugin->lt('My name is %s', 'Hans');
+     *
+     *
+     * @return string
+     * @throws \Exception
+     * @author Andreas Glaser
+     */
+    public function tl()
+    {
+        $args = func_get_args();
+
+        if (empty($args)) {
+            throw new \Exception('No aguments provided');
+        }
+
+        $string = $args[0];
+
+        Expect::str($string);
+
+        $data = ArrayHelper::removeFirstIndex($args);
+        $string = $this->t($string);
+
+        return vsprintf($string, $data);
+    }
 }
