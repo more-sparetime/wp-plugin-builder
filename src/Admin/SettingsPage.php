@@ -1,16 +1,16 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder\Admin;
+namespace MoreSparetime\WordPress\PluginBuilder\Admin;
 
-use AndreasGlaser\Helpers\Html\FormHelper;
-use AndreasGlaser\Helpers\HtmlHelper;
-use AndreasGlaser\WordPress\PluginBuilder\Admin\Settings\Section;
-use AndreasGlaser\WordPress\PluginBuilder\AttachableInterface;
+use MoreSparetime\Helpers\Html\FormHelper;
+use MoreSparetime\Helpers\HtmlHelper;
+use MoreSparetime\WordPress\PluginBuilder\Admin\Settings\Section;
+use MoreSparetime\WordPress\PluginBuilder\AttachableInterface;
 
 /**
  * Class SettingsPage
  *
- * @package AndreasGlaser\WordPress\PluginBuilder\Admin
+ * @package MoreSparetime\WordPress\PluginBuilder\Admin
  * @author  Andreas Glaser
  */
 class SettingsPage extends Page implements AttachableInterface
@@ -21,7 +21,7 @@ class SettingsPage extends Page implements AttachableInterface
     protected $sections = [];
 
     /**
-     * @param \AndreasGlaser\WordPress\PluginBuilder\Admin\Settings\Section $section
+     * @param \MoreSparetime\WordPress\PluginBuilder\Admin\Settings\Section $section
      *
      * @return $this
      * @author Andreas Glaser

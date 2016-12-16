@@ -1,10 +1,10 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder\Admin\Settings;
+namespace MoreSparetime\WordPress\PluginBuilder\Admin\Settings;
 
-use AndreasGlaser\WordPress\PluginBuilder\Admin\Page;
-use AndreasGlaser\WordPress\PluginBuilder\Admin\SettingsPage;
-use AndreasGlaser\WordPress\PluginBuilder\AttachableInterface;
+use MoreSparetime\WordPress\PluginBuilder\Admin\Page;
+use MoreSparetime\WordPress\PluginBuilder\Admin\SettingsPage;
+use MoreSparetime\WordPress\PluginBuilder\AttachableInterface;
 
 class Section implements AttachableInterface
 {
@@ -24,14 +24,14 @@ class Section implements AttachableInterface
     protected $title;
 
     /**
-     * @var \AndreasGlaser\WordPress\PluginBuilder\Admin\SettingsPage
+     * @var \MoreSparetime\WordPress\PluginBuilder\Admin\SettingsPage
      */
     protected $page;
 
     /**
      * Section constructor.
      *
-     * @param \AndreasGlaser\WordPress\PluginBuilder\Admin\SettingsPage $page
+     * @param \MoreSparetime\WordPress\PluginBuilder\Admin\SettingsPage $page
      * @param string                                                    $slug
      * @param string                                                    $title
      *
@@ -77,7 +77,7 @@ class Section implements AttachableInterface
     }
 
     /**
-     * @param \AndreasGlaser\WordPress\PluginBuilder\Admin\Settings\Field $field
+     * @param \MoreSparetime\WordPress\PluginBuilder\Admin\Settings\Field $field
      *
      * @return $this
      * @author Andreas Glaser
@@ -132,7 +132,7 @@ class Section implements AttachableInterface
     }
 
     /**
-     * @param \AndreasGlaser\WordPress\PluginBuilder\Admin\Page $page
+     * @param \MoreSparetime\WordPress\PluginBuilder\Admin\Page $page
      *
      * @return $this
      * @author Andreas Glaser
@@ -145,7 +145,7 @@ class Section implements AttachableInterface
     }
 
     /**
-     * @return \AndreasGlaser\WordPress\PluginBuilder\Admin\Page
+     * @return \MoreSparetime\WordPress\PluginBuilder\Admin\Page
      * @author Andreas Glaser
      */
     public function getPage()

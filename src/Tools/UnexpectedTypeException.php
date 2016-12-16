@@ -1,11 +1,11 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder\Tools;
+namespace MoreSparetime\WordPress\PluginBuilder\Tools;
 
 /**
  * Class UnexpectedTypeException
  *
- * @package AndreasGlaser\WordPress\PluginBuilder\Tools
+ * @package MoreSparetime\WordPress\PluginBuilder\Tools
  * @author  Andreas Glaser
  */
 class UnexpectedTypeException extends \RuntimeException

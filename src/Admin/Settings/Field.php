@@ -1,16 +1,16 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder\Admin\Settings;
+namespace MoreSparetime\WordPress\PluginBuilder\Admin\Settings;
 
-use AndreasGlaser\WordPress\PluginBuilder\Admin\Page;
-use AndreasGlaser\WordPress\PluginBuilder\AttachableInterface;
-use AndreasGlaser\WordPress\PluginBuilder\Plugin;
-use AndreasGlaser\WordPress\PluginBuilder\RenderableTrait;
+use MoreSparetime\WordPress\PluginBuilder\Admin\Page;
+use MoreSparetime\WordPress\PluginBuilder\AttachableInterface;
+use MoreSparetime\WordPress\PluginBuilder\Plugin;
+use MoreSparetime\WordPress\PluginBuilder\RenderableTrait;
 
 /**
  * Class Field
  *
- * @package AndreasGlaser\WordPress\PluginBuilder\Admin\Settings
+ * @package MoreSparetime\WordPress\PluginBuilder\Admin\Settings
  * @author  Andreas Glaser
  */
 abstract class Field implements AttachableInterface
@@ -45,7 +45,7 @@ abstract class Field implements AttachableInterface
     /**
      * Field constructor.
      *
-     * @param \AndreasGlaser\WordPress\PluginBuilder\Admin\Settings\Section $section
+     * @param \MoreSparetime\WordPress\PluginBuilder\Admin\Settings\Section $section
      * @param string                                                        $slug
      * @param string                                                        $title
      *
@@ -59,7 +59,7 @@ abstract class Field implements AttachableInterface
     }
 
     /**
-     * @param \AndreasGlaser\WordPress\PluginBuilder\Admin\Settings\Section $section
+     * @param \MoreSparetime\WordPress\PluginBuilder\Admin\Settings\Section $section
      *
      * @return $this
      * @author Andreas Glaser

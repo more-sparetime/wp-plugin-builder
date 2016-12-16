@@ -1,14 +1,14 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder\Tools;
+namespace MoreSparetime\WordPress\PluginBuilder\Tools;
 
 /**
  * Class Expect
  *
- * @package    AndreasGlaser\WordPress\PluginBuilder\Tools
+ * @package    MoreSparetime\WordPress\PluginBuilder\Tools
  * @author     Andreas Glaser
  * @deprecated Do not use
  */
-class Expect extends \AndreasGlaser\Helpers\Validate\Expect
+class Expect extends \MoreSparetime\Helpers\Validate\Expect
 {
 }

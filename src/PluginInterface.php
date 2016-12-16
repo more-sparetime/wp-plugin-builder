@@ -1,11 +1,11 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder;
+namespace MoreSparetime\WordPress\PluginBuilder;
 
 /**
  * Interface PluginInterface
  *
- * @package AndreasGlaser\WordPress\PluginBuilder
+ * @package MoreSparetime\WordPress\PluginBuilder
  * @author  Andreas Glaser
  */
 interface PluginInterface

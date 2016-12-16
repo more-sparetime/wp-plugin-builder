@@ -1,14 +1,14 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder\Admin\Menu;
+namespace MoreSparetime\WordPress\PluginBuilder\Admin\Menu;
 
-use AndreasGlaser\WordPress\PluginBuilder\Admin\Page;
-use AndreasGlaser\WordPress\PluginBuilder\AttachableInterface;
+use MoreSparetime\WordPress\PluginBuilder\Admin\Page;
+use MoreSparetime\WordPress\PluginBuilder\AttachableInterface;
 
 /**
  * Class SubMenu
  *
- * @package AndreasGlaser\WordPress\PluginBuilder\Admin\SubMenu
+ * @package MoreSparetime\WordPress\PluginBuilder\Admin\SubMenu
  * @author  Andreas Glaser
  */
 class SubMenu implements AttachableInterface
@@ -19,12 +19,12 @@ class SubMenu implements AttachableInterface
     protected $title;
 
     /**
-     * @var \AndreasGlaser\WordPress\PluginBuilder\Admin\Menu\Menu
+     * @var \MoreSparetime\WordPress\PluginBuilder\Admin\Menu\Menu
      */
     protected $menu;
 
     /**
-     * @var \AndreasGlaser\WordPress\PluginBuilder\Admin\Page
+     * @var \MoreSparetime\WordPress\PluginBuilder\Admin\Page
      */
     protected $page;
 

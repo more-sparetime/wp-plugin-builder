@@ -1,5 +1,5 @@
 {
-  "name": "andreas-glaser/wp-plugin-builder",
+  "name": "more-sparetime/wp-plugin-builder",
   "description": "Optimized, object oriented WordPress plugin builder library",
   "keywords": [
     "php",
@@ -7,7 +7,7 @@
     "plugin",
     "framework"
   ],
-  "homepage": "https://github.com/andreas-glaser/wp-plugin-builder",
+  "homepage": "https://github.com/more-sparetime/wp-plugin-builder",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -23,8 +23,7 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^5",
-    "symfony/var-dumper": "@stable",
-    "doctrine/data-fixtures": "@stable"
+    "symfony/var-dumper": "@stable"
   },
   "suggest": {},
   "config": {
@@ -32,12 +31,12 @@
   },
   "autoload": {
     "psr-4": {
-      "AndreasGlaser\\WordPress\\PluginBuilder\\": "src/"
+      "MoreSparetime\\WordPress\\PluginBuilder\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "AndreasGlaser\\WordPress\\PluginBuilder\\": "tests/"
+      "MoreSparetime\\WordPress\\PluginBuilder\\": "tests/"
     }
   },
   "extra": {

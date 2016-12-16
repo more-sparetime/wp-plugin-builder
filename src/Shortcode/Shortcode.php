@@ -1,16 +1,16 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder\Shortcode;
+namespace MoreSparetime\WordPress\PluginBuilder\Shortcode;
 
-use AndreasGlaser\WordPress\PluginBuilder\AttachableInterface;
-use AndreasGlaser\WordPress\PluginBuilder\Plugin;
-use AndreasGlaser\WordPress\PluginBuilder\PluginAwareTrait;
-use AndreasGlaser\WordPress\PluginBuilder\Tools\Expect;
+use MoreSparetime\WordPress\PluginBuilder\AttachableInterface;
+use MoreSparetime\WordPress\PluginBuilder\Plugin;
+use MoreSparetime\WordPress\PluginBuilder\PluginAwareTrait;
+use MoreSparetime\WordPress\PluginBuilder\Tools\Expect;
 
 /**
  * Class Shortcode
  *
- * @package AndreasGlaser\WordPress\PluginBuilder\Shortcode
+ * @package MoreSparetime\WordPress\PluginBuilder\Shortcode
  * @author  Andreas Glaser
  */
 class Shortcode implements AttachableInterface

@@ -1,16 +1,16 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder\Cron;
+namespace MoreSparetime\WordPress\PluginBuilder\Cron;
 
-use AndreasGlaser\WordPress\PluginBuilder\AttachableInterface;
-use AndreasGlaser\WordPress\PluginBuilder\Plugin;
-use AndreasGlaser\WordPress\PluginBuilder\PluginAwareTrait;
-use AndreasGlaser\WordPress\PluginBuilder\Tools\Expect;
+use MoreSparetime\WordPress\PluginBuilder\AttachableInterface;
+use MoreSparetime\WordPress\PluginBuilder\Plugin;
+use MoreSparetime\WordPress\PluginBuilder\PluginAwareTrait;
+use MoreSparetime\WordPress\PluginBuilder\Tools\Expect;
 
 /**
  * Class Cron
  *
- * @package AndreasGlaser\WordPress\PluginBuilder\Cron
+ * @package MoreSparetime\WordPress\PluginBuilder\Cron
  * @author  Andreas Glaser
  */
 class Cron implements AttachableInterface

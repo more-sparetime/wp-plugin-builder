@@ -1,17 +1,17 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder\Admin;
+namespace MoreSparetime\WordPress\PluginBuilder\Admin;
 
-use AndreasGlaser\Helpers\HtmlHelper;
-use AndreasGlaser\WordPress\PluginBuilder\PluginAwareTrait;
-use AndreasGlaser\WordPress\PluginBuilder\PluginInterface;
-use AndreasGlaser\WordPress\PluginBuilder\RenderableTrait;
-use AndreasGlaser\WordPress\PluginBuilder\Tools\Expect;
+use MoreSparetime\Helpers\HtmlHelper;
+use MoreSparetime\WordPress\PluginBuilder\PluginAwareTrait;
+use MoreSparetime\WordPress\PluginBuilder\PluginInterface;
+use MoreSparetime\WordPress\PluginBuilder\RenderableTrait;
+use MoreSparetime\WordPress\PluginBuilder\Tools\Expect;
 
 /**
  * Class Page
  *
- * @package AndreasGlaser\WordPress\PluginBuilder\Admin
+ * @package MoreSparetime\WordPress\PluginBuilder\Admin
  * @author  Andreas Glaser
  */
 class Page

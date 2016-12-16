@@ -1,11 +1,11 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder;
+namespace MoreSparetime\WordPress\PluginBuilder;
 
 /**
  * Class RenderableTrait
  *
- * @package AndreasGlaser\WordPress\PluginBuilder
+ * @package MoreSparetime\WordPress\PluginBuilder
  * @author  Andreas Glaser
  */
 trait RenderableTrait
@@ -16,7 +16,7 @@ trait RenderableTrait
     protected $renderer;
 
     /**
-     * @param \AndreasGlaser\WordPress\PluginBuilder\RendererInterface $renderer
+     * @param \MoreSparetime\WordPress\PluginBuilder\RendererInterface $renderer
      *
      * @return $this
      * @author Andreas Glaser
@@ -29,7 +29,7 @@ trait RenderableTrait
     }
 
     /**
-     * @return \AndreasGlaser\WordPress\PluginBuilder\RendererInterface|null
+     * @return \MoreSparetime\WordPress\PluginBuilder\RendererInterface|null
      * @author Andreas Glaser
      */
     public function getRenderer()

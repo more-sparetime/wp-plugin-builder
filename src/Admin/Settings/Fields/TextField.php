@@ -1,14 +1,14 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder\Admin\Settings\Fields;
+namespace MoreSparetime\WordPress\PluginBuilder\Admin\Settings\Fields;
 
-use AndreasGlaser\Helpers\Html\FormHelper;
-use AndreasGlaser\WordPress\PluginBuilder\Admin\Settings\Field;
+use MoreSparetime\Helpers\Html\FormHelper;
+use MoreSparetime\WordPress\PluginBuilder\Admin\Settings\Field;
 
 /**
  * Class TextField
  *
- * @package AndreasGlaser\WordPress\PluginBuilder\Admin\Settings\Fields
+ * @package MoreSparetime\WordPress\PluginBuilder\Admin\Settings\Fields
  * @author  Andreas Glaser
  */
 class TextField extends Field

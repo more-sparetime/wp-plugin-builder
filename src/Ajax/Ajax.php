@@ -1,16 +1,16 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder\Ajax;
+namespace MoreSparetime\WordPress\PluginBuilder\Ajax;
 
-use AndreasGlaser\WordPress\PluginBuilder\AttachableInterface;
-use AndreasGlaser\WordPress\PluginBuilder\PluginAwareTrait;
-use AndreasGlaser\WordPress\PluginBuilder\PluginInterface;
-use AndreasGlaser\WordPress\PluginBuilder\Tools\Expect;
+use MoreSparetime\WordPress\PluginBuilder\AttachableInterface;
+use MoreSparetime\WordPress\PluginBuilder\PluginAwareTrait;
+use MoreSparetime\WordPress\PluginBuilder\PluginInterface;
+use MoreSparetime\WordPress\PluginBuilder\Tools\Expect;
 
 /**
  * Class Call
  *
- * @package AndreasGlaser\WordPress\PluginBuilder\Shortcode
+ * @package MoreSparetime\WordPress\PluginBuilder\Shortcode
  * @author  Andreas Glaser
  */
 class Ajax implements AttachableInterface
@@ -40,7 +40,7 @@ class Ajax implements AttachableInterface
     /**
      * Ajax constructor.
      *
-     * @param \AndreasGlaser\WordPress\PluginBuilder\PluginInterface $plugin
+     * @param \MoreSparetime\WordPress\PluginBuilder\PluginInterface $plugin
      * @param                                                        $slug
      * @param                                                        $callback
      * @param bool                                                   $internal

@@ -1,11 +1,11 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder;
+namespace MoreSparetime\WordPress\PluginBuilder;
 
 /**
  * Interface AttachableInterface
  *
- * @package AndreasGlaser\WordPress\PluginBuilder
+ * @package MoreSparetime\WordPress\PluginBuilder
  * @author  Andreas Glaser
  */
 trait PluginAwareTrait
@@ -16,7 +16,7 @@ trait PluginAwareTrait
     protected $plugin;
 
     /**
-     * @param \AndreasGlaser\WordPress\PluginBuilder\PluginInterface $plugin
+     * @param \MoreSparetime\WordPress\PluginBuilder\PluginInterface $plugin
      *
      * @return $this
      * @author Andreas Glaser
@@ -29,7 +29,7 @@ trait PluginAwareTrait
     }
 
     /**
-     * @return \AndreasGlaser\WordPress\PluginBuilder\Plugin
+     * @return \MoreSparetime\WordPress\PluginBuilder\Plugin
      * @author Andreas Glaser
      */
     public function getPlugin()

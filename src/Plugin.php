@@ -1,18 +1,18 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder;
+namespace MoreSparetime\WordPress\PluginBuilder;
 
-use AndreasGlaser\Helpers\ArrayHelper;
-use AndreasGlaser\WordPress\PluginBuilder\Admin\Menu\Menu;
-use AndreasGlaser\WordPress\PluginBuilder\Ajax\Ajax;
-use AndreasGlaser\WordPress\PluginBuilder\Cron\Cron;
-use AndreasGlaser\WordPress\PluginBuilder\Shortcode\Shortcode;
-use AndreasGlaser\WordPress\PluginBuilder\Tools\Expect;
+use MoreSparetime\Helpers\ArrayHelper;
+use MoreSparetime\WordPress\PluginBuilder\Admin\Menu\Menu;
+use MoreSparetime\WordPress\PluginBuilder\Ajax\Ajax;
+use MoreSparetime\WordPress\PluginBuilder\Cron\Cron;
+use MoreSparetime\WordPress\PluginBuilder\Shortcode\Shortcode;
+use MoreSparetime\WordPress\PluginBuilder\Tools\Expect;
 
 /**
  * Class Plugin
  *
- * @package AndreasGlaser\WordPress\PluginBuilder
+ * @package MoreSparetime\WordPress\PluginBuilder
  * @author  Andreas Glaser
  */
 class Plugin implements PluginInterface, AttachableInterface
@@ -28,7 +28,7 @@ class Plugin implements PluginInterface, AttachableInterface
     protected $prefixSeparator = '_';
 
     /**
-     * @var \AndreasGlaser\WordPress\PluginBuilder\Admin\Menu\Menu[]
+     * @var \MoreSparetime\WordPress\PluginBuilder\Admin\Menu\Menu[]
      */
     protected $menus = [];
 
@@ -109,7 +109,7 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
-     * @param \AndreasGlaser\WordPress\PluginBuilder\Admin\Menu\Menu $menu
+     * @param \MoreSparetime\WordPress\PluginBuilder\Admin\Menu\Menu $menu
      *
      * @return $this
      * @author Andreas Glaser
@@ -124,7 +124,7 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
-     * @param \AndreasGlaser\WordPress\PluginBuilder\Shortcode\Shortcode $shortcode
+     * @param \MoreSparetime\WordPress\PluginBuilder\Shortcode\Shortcode $shortcode
      *
      * @return $this
      * @author Andreas Glaser
@@ -139,7 +139,7 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
-     * @param \AndreasGlaser\WordPress\PluginBuilder\Cron\Cron $cron
+     * @param \MoreSparetime\WordPress\PluginBuilder\Cron\Cron $cron
      *
      * @return $this
      * @author Andreas Glaser
@@ -160,7 +160,7 @@ class Plugin implements PluginInterface, AttachableInterface
      * @param callable $callback
      * @param string   $recurrence
      *
-     * @return \AndreasGlaser\WordPress\PluginBuilder\Plugin
+     * @return \MoreSparetime\WordPress\PluginBuilder\Plugin
      * @author Andreas Glaser
      */
     public function cron($slug, $callback, $recurrence = 'hourly')
@@ -178,7 +178,7 @@ class Plugin implements PluginInterface, AttachableInterface
      * @param string   $slug
      * @param callable $callback
      *
-     * @return \AndreasGlaser\WordPress\PluginBuilder\Plugin
+     * @return \MoreSparetime\WordPress\PluginBuilder\Plugin
      * @author Andreas Glaser
      */
     public function shortcode($slug, $callback)
@@ -190,7 +190,7 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
-     * @param \AndreasGlaser\WordPress\PluginAjax $ajax
+     * @param \MoreSparetime\WordPress\PluginAjax $ajax
      *
      * @return $this
      * @author Andreas Glaser
@@ -212,7 +212,7 @@ class Plugin implements PluginInterface, AttachableInterface
      * @param bool     $internal
      * @param bool     $external
      *
-     * @return \AndreasGlaser\WordPress\PluginBuilder\Plugin
+     * @return \MoreSparetime\WordPress\PluginBuilder\Plugin
      * @author Andreas Glaser
      */
     public function ajaxCall($slug, $callback, $internal = true, $external = false)
@@ -231,7 +231,7 @@ class Plugin implements PluginInterface, AttachableInterface
      * @param $slug
      * @param $callback
      *
-     * @return \AndreasGlaser\WordPress\PluginBuilder\Plugin
+     * @return \MoreSparetime\WordPress\PluginBuilder\Plugin
      * @author Andreas Glaser
      */
     public function ajaxCallInternal($slug, $callback)
@@ -248,7 +248,7 @@ class Plugin implements PluginInterface, AttachableInterface
      * @param $slug
      * @param $callback
      *
-     * @return \AndreasGlaser\WordPress\PluginBuilder\Plugin
+     * @return \MoreSparetime\WordPress\PluginBuilder\Plugin
      * @author Andreas Glaser
      */
     public function ajaxCallExternal($slug, $callback)
@@ -265,7 +265,7 @@ class Plugin implements PluginInterface, AttachableInterface
      * @param $slug
      * @param $callback
      *
-     * @return \AndreasGlaser\WordPress\PluginBuilder\Plugin
+     * @return \MoreSparetime\WordPress\PluginBuilder\Plugin
      * @author Andreas Glaser
      */
     public function ajaxCallGlobal($slug, $callback)

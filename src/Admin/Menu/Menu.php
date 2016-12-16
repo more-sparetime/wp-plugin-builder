@@ -1,14 +1,14 @@
 <?php
 
-namespace AndreasGlaser\WordPress\PluginBuilder\Admin\Menu;
+namespace MoreSparetime\WordPress\PluginBuilder\Admin\Menu;
 
-use AndreasGlaser\WordPress\PluginBuilder\Admin\Page;
-use AndreasGlaser\WordPress\PluginBuilder\AttachableInterface;
+use MoreSparetime\WordPress\PluginBuilder\Admin\Page;
+use MoreSparetime\WordPress\PluginBuilder\AttachableInterface;
 
 /**
  * Class Menu
  *
- * @package AndreasGlaser\WordPress\PluginBuilder\Admin\Menu
+ * @package MoreSparetime\WordPress\PluginBuilder\Admin\Menu
  * @author  Andreas Glaser
  */
 class Menu implements AttachableInterface
@@ -29,7 +29,7 @@ class Menu implements AttachableInterface
     protected $title;
 
     /**
-     * @var \AndreasGlaser\WordPress\PluginBuilder\Admin\Page
+     * @var \MoreSparetime\WordPress\PluginBuilder\Admin\Page
      */
     protected $page;
 
@@ -41,7 +41,7 @@ class Menu implements AttachableInterface
     /**
      * Menu constructor.
      *
-     * @param \AndreasGlaser\WordPress\PluginBuilder\Admin\Page $page
+     * @param \MoreSparetime\WordPress\PluginBuilder\Admin\Page $page
      * @param string                                            $title
      * @param string                                            $icon
      * @param float                                             $position
@@ -57,7 +57,7 @@ class Menu implements AttachableInterface
     }
 
     /**
-     * @param \AndreasGlaser\WordPress\PluginBuilder\Admin\Menu\SubMenu $subMenu
+     * @param \MoreSparetime\WordPress\PluginBuilder\Admin\Menu\SubMenu $subMenu
      *
      * @return $this
      * @author Andreas Glaser
@@ -72,7 +72,7 @@ class Menu implements AttachableInterface
     }
 
     /**
-     * @return \AndreasGlaser\WordPress\PluginBuilder\Admin\Menu\SubMenu[]
+     * @return \MoreSparetime\WordPress\PluginBuilder\Admin\Menu\SubMenu[]
      * @author Andreas Glaser
      */
     public function getSubMenus()
@@ -108,7 +108,7 @@ class Menu implements AttachableInterface
     }
 
     /**
-     * @return \AndreasGlaser\WordPress\PluginBuilder\Admin\Page
+     * @return \MoreSparetime\WordPress\PluginBuilder\Admin\Page
      * @author Andreas Glaser
      */
     public function getPage()
