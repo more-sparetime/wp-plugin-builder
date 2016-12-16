@@ -136,7 +136,7 @@ class Menu implements AttachableInterface
                 $this->title,
                 $this->page->getCapability(),
                 $this->page->getSlug(),
-                $this->page->getCallback(),
+                $this->page->getController(),
                 $this->icon,
                 $this->position
             );

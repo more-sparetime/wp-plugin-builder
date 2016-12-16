@@ -53,7 +53,7 @@ class Section implements AttachableInterface
      */
     public function setSlug($slug)
     {
-        $this->slug = $this->page->getSlug() . $this->page->getPlugin()->getPrefixSeparator() . $slug;
+        $this->slug = $this->page->getSlug() . $this->page->getPlugin()->getSlugSeparator() . $slug;
 
         return $this;
     }
@@ -73,7 +73,7 @@ class Section implements AttachableInterface
      */
     public function getGroupName()
     {
-        return $this->getSlug() . $this->page->getPlugin()->getPrefixSeparator() . 'group';
+        return $this->getSlug() . $this->page->getPlugin()->getSlugSeparator() . 'group';
     }
 
     /**

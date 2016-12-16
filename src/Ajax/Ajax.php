@@ -35,24 +35,24 @@ class Ajax implements AttachableInterface
     /**
      * @var callable
      */
-    protected $callback;
+    protected $controller;
 
     /**
      * Ajax constructor.
      *
      * @param \MoreSparetime\WordPress\PluginBuilder\PluginInterface $plugin
      * @param string                                                 $slug
-     * @param callable                                               $callback
+     * @param callable                                               $controller
      * @param bool                                                   $internal
      * @param                                                        bool
      *
      * @author Andreas Glaser
      */
-    public function __construct(PluginInterface $plugin, $slug, $callback, $internal = true, $external = false)
+    public function __construct(PluginInterface $plugin, $slug, $controller, $internal = true, $external = false)
     {
         $this->setPlugin($plugin);
         $this->setSlug($slug);
-        $this->setCallback($callback);
+        $this->setController($controller);
         $this->setInternal((bool)$internal);
         $this->setExternal((bool)$external);
     }
@@ -82,16 +82,16 @@ class Ajax implements AttachableInterface
     }
 
     /**
-     * @param callable $callback
+     * @param callable $controller
      *
      * @return $this
      * @author Andreas Glaser
      */
-    protected function setCallback($callback)
+    protected function setController($controller)
     {
-        Expect::isCallable($callback);
+        Expect::isCallable($controller);
 
-        $this->callback = $callback;
+        $this->controller = $controller;
 
         return $this;
     }
@@ -100,9 +100,9 @@ class Ajax implements AttachableInterface
      * @return callable
      * @author Andreas Glaser
      */
-    protected function getCallback()
+    protected function getController()
     {
-        return $this->callback;
+        return $this->controller;
     }
 
     /**
@@ -160,11 +160,11 @@ class Ajax implements AttachableInterface
     public function attachHooks()
     {
         if ($this->getInternal()) {
-            add_action('wp_ajax_' . $this->getSlug(), $this->callback);
+            add_action('wp_ajax_' . $this->getSlug(), $this->controller);
         }
 
         if ($this->getExternal()) {
-            add_action('wp_ajax_nopriv_' . $this->getSlug(), $this->callback);
+            add_action('wp_ajax_nopriv_' . $this->getSlug(), $this->controller);
         }
     }
 }

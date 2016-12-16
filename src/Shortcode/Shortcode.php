@@ -25,30 +25,30 @@ class Shortcode implements AttachableInterface
     /**
      * @var array
      */
-    protected $defaults;
+    protected $context;
 
     /**
      * @var callable
      */
-    protected $callback;
+    protected $controller;
 
     /**
      * Shortcode constructor.
      *
      * @param \MoreSparetime\WordPress\PluginBuilder\Plugin $plugin
      * @param string                                        $slug
-     * @param callable                                      $callback
-     * @param array                                         $defaults
+     * @param callable                                      $controller
+     * @param array                                         $context
      *
      * @author Andreas Glaser
      */
-    public function __construct(Plugin $plugin, $slug, $callback, array $defaults = [])
+    public function __construct(Plugin $plugin, $slug, $controller, array $context = [])
     {
         $this->setPlugin($plugin);
         $this->setSlug($slug);
-        $this->setCallback($callback);
+        $this->setController($controller);
 
-        $this->defaults = $defaults;
+        $this->context = $context;
     }
 
     /**
@@ -89,21 +89,21 @@ class Shortcode implements AttachableInterface
      * @return array
      * @author Andreas Glaser
      */
-    public function getDefaults()
+    public function getContext()
     {
-        return $this->defaults;
+        return $this->context;
     }
 
     /**
-     * @param $callback
+     * @param $controller
      *
      * @return $this
      * @author Andreas Glaser
      */
-    public function setCallback($callback)
+    public function setController($controller)
     {
-        Expect::isCallable($callback);
-        $this->callback = $callback;
+        Expect::isCallable($controller);
+        $this->controller = $controller;
 
         return $this;
     }
@@ -112,9 +112,9 @@ class Shortcode implements AttachableInterface
      * @return callable
      * @author Andreas Glaser
      */
-    public function getCallback()
+    public function getController()
     {
-        return $this->callback;
+        return $this->controller;
     }
 
     /**
@@ -132,7 +132,6 @@ class Shortcode implements AttachableInterface
 
     /**
      * @param $args
-     *
      * @param $content
      * @param $tag
      *
@@ -140,7 +139,7 @@ class Shortcode implements AttachableInterface
      */
     public function dispatch($args, $content, $tag)
     {
-        $attributes = shortcode_atts($this->getDefaults(), $args, $this->getName());
-        call_user_func_array($this->callback, ['shortcode' => $this, 'attributes' => $attributes, 'content' => $content]);
+        $attributes = shortcode_atts($this->getContext(), $args, $this->getName());
+        call_user_func_array($this->controller, ['shortcode' => $this, 'attributes' => $attributes, 'content' => $content, 'tag' => $tag]);
     }
 }

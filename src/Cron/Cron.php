@@ -25,7 +25,7 @@ class Cron implements AttachableInterface
     /**
      * @var callable
      */
-    protected $callback;
+    protected $controller;
 
     /**
      * @var string
@@ -37,16 +37,16 @@ class Cron implements AttachableInterface
      *
      * @param \MoreSparetime\WordPress\PluginBuilder\Plugin $plugin
      * @param string                                        $slug
-     * @param callable                                      $callback
+     * @param callable                                      $controller
      * @param string                                        $recurrence
      *
      * @author Andreas Glaser
      */
-    public function __construct(Plugin $plugin, $slug, $callback, $recurrence = 'hourly')
+    public function __construct(Plugin $plugin, $slug, $controller, $recurrence = 'hourly')
     {
         $this->setPlugin($plugin);
         $this->setSlug($slug);
-        $this->setCallback($callback);
+        $this->setController($controller);
         $this->setRecurrence($recurrence);
     }
 
@@ -77,22 +77,22 @@ class Cron implements AttachableInterface
      * @return callable
      * @author Andreas Glaser
      */
-    public function getCallback()
+    public function getController()
     {
-        return $this->callback;
+        return $this->controller;
     }
 
     /**
-     * @param callable $callback
+     * @param callable $controller
      *
      * @return Cron
      * @author Andreas Glaser
      */
-    public function setCallback($callback)
+    public function setController($controller)
     {
-        Expect::isCallable($callback);
+        Expect::isCallable($controller);
 
-        $this->callback = $callback;
+        $this->controller = $controller;
 
         return $this;
     }
@@ -131,7 +131,7 @@ class Cron implements AttachableInterface
             wp_schedule_event(time(), $this->recurrence, $this->slug);
         }
 
-        add_action($this->slug, $this->callback);
+        add_action($this->slug, $this->controller);
 
         // remove cron on deactivation
         register_deactivation_hook($this->plugin->getPluginFilePath(), function () {

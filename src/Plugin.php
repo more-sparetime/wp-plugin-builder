@@ -4,6 +4,7 @@ namespace MoreSparetime\WordPress\PluginBuilder;
 
 use AndreasGlaser\Helpers\ArrayHelper;
 use AndreasGlaser\Helpers\Validate\Expect;
+use AndreasGlaser\Helpers\View\PHPView;
 use MoreSparetime\WordPress\PluginBuilder\Admin\Menu\Menu;
 use MoreSparetime\WordPress\PluginBuilder\Ajax\Ajax;
 use MoreSparetime\WordPress\PluginBuilder\Controller\ControllerInterface;
@@ -21,12 +22,12 @@ class Plugin implements PluginInterface, AttachableInterface
     /**
      * @var string
      */
-    protected $prefix = 'my_plugin';
+    protected $slug = 'my_plugin';
 
     /**
      * @var string
      */
-    protected $prefixSeparator = '_';
+    protected $slugSeparator = '_';
 
     /**
      * @var \MoreSparetime\WordPress\PluginBuilder\Admin\Menu\Menu[]
@@ -74,33 +75,40 @@ class Plugin implements PluginInterface, AttachableInterface
     protected $controllers = [];
 
     /**
-     * Plugin constructor.
-     *
-     * @param $prefix
-     *
-     * @author Andreas Glaser
+     * @var array
      */
-    public function __construct($prefix)
+    protected $config = [
+        'views_dir' => null,
+    ];
+
+    public function __construct($prefix, array $config = [])
     {
-        $this->prefix = $prefix;
+        $this->slug = $prefix;
+        $this->config = ArrayHelper::merge($this->config, $config);
+
+        if ($this->config['views_dir']) {
+            if (!is_dir($this->config['views_dir'])) {
+                throw new \Exception(sprintf('"%s" is not a directory', $this->config['views_dir']));
+            }
+        }
     }
 
     /**
      * @return string
      * @author Andreas Glaser
      */
-    public function getPrefix()
+    public function getSlug()
     {
-        return $this->prefix;
+        return $this->slug;
     }
 
     /**
      * @return string
      * @author Andreas Glaser
      */
-    public function getPrefixSeparator()
+    public function getSlugSeparator()
     {
-        return $this->prefixSeparator;
+        return $this->slugSeparator;
     }
 
     /**
@@ -109,9 +117,9 @@ class Plugin implements PluginInterface, AttachableInterface
      */
     public function makeSlug(/* POLYMORPHIC */)
     {
-        $pieces = ArrayHelper::merge([$this->prefix], func_get_args());
+        $pieces = ArrayHelper::merge([$this->slug], func_get_args());
 
-        return implode($this->prefixSeparator, $pieces);
+        return implode($this->slugSeparator, $pieces);
     }
 
     /**
@@ -135,7 +143,7 @@ class Plugin implements PluginInterface, AttachableInterface
      * @return $this
      * @author Andreas Glaser
      */
-    public function addShortcode(Shortcode\Shortcode $shortcode)
+    public function addShortcode(Shortcode $shortcode)
     {
         if (!in_array($shortcode, $this->shortcodes)) {
             $this->shortcodes [] = $shortcode;
@@ -163,34 +171,35 @@ class Plugin implements PluginInterface, AttachableInterface
      * Shorthand
      *
      * @param string   $slug
-     * @param callable $callback
+     * @param callable $controller
      * @param string   $recurrence
      *
      * @return \MoreSparetime\WordPress\PluginBuilder\Plugin
      * @author Andreas Glaser
      */
-    public function cron($slug, $callback, $recurrence = 'hourly')
+    public function cron($slug, $controller, $recurrence = 'hourly')
     {
         Expect::str($slug);
-        Expect::isCallable($callback);
+        Expect::isCallable($controller);
         Expect::str($recurrence);
 
-        return $this->addCron(new Cron($this, $slug, $callback, $recurrence));
+        return $this->addCron(new Cron($this, $slug, $controller, $recurrence));
     }
 
     /**
-     * @param $slug
-     * @param $callback
+     * @param string   $slug
+     * @param callable $controller
+     * @param array    $context
      *
      * @return \MoreSparetime\WordPress\PluginBuilder\Plugin
      * @author Andreas Glaser
      */
-    public function shortcode($slug, $callback)
+    public function shortcode($slug, $controller, array $context = [])
     {
         Expect::str($slug);
-        Expect::isCallable($callback);
+        Expect::isCallable($controller);
 
-        return $this->addShortcode(new Shortcode($this, $slug, $callback));
+        return $this->addShortcode(new Shortcode($this, $slug, $controller, $context));
     }
 
     /**
@@ -212,120 +221,120 @@ class Plugin implements PluginInterface, AttachableInterface
      * Helper for adding ajax calls.
      *
      * @param string   $slug
-     * @param callable $callback
+     * @param callable $controller
      * @param bool     $internal
      * @param bool     $external
      *
      * @return \MoreSparetime\WordPress\PluginBuilder\Plugin
      * @author Andreas Glaser
      */
-    public function ajaxCall($slug, $callback, $internal = true, $external = false)
+    public function ajaxCall($slug, $controller, $internal = true, $external = false)
     {
         Expect::str($slug);
-        Expect::isCallable($callback);
+        Expect::isCallable($controller);
         Expect::bool($internal);
         Expect::bool($external);
 
-        return $this->addAjaxCall(new Ajax($this, $slug, $callback, $internal, $external));
+        return $this->addAjaxCall(new Ajax($this, $slug, $controller, $internal, $external));
     }
 
     /**
      * Adds ajax call, available for admin pages.
      *
      * @param $slug
-     * @param $callback
+     * @param $controller
      *
      * @return \MoreSparetime\WordPress\PluginBuilder\Plugin
      * @author Andreas Glaser
      */
-    public function ajaxCallInternal($slug, $callback)
+    public function ajaxCallInternal($slug, $controller)
     {
         Expect::str($slug);
-        Expect::isCallable($callback);
+        Expect::isCallable($controller);
 
-        return $this->addAjaxCall(new Ajax($this, $slug, $callback, true, false));
+        return $this->addAjaxCall(new Ajax($this, $slug, $controller, true, false));
     }
 
     /**
      * Adds ajax call available for external user front-end.
      *
      * @param $slug
-     * @param $callback
+     * @param $controller
      *
      * @return \MoreSparetime\WordPress\PluginBuilder\Plugin
      * @author Andreas Glaser
      */
-    public function ajaxCallExternal($slug, $callback)
+    public function ajaxCallExternal($slug, $controller)
     {
         Expect::str($slug);
-        Expect::isCallable($callback);
+        Expect::isCallable($controller);
 
-        return $this->addAjaxCall(new Ajax($this, $slug, $callback, false, true));
+        return $this->addAjaxCall(new Ajax($this, $slug, $controller, false, true));
     }
 
     /**
      * Adds ajax call available for both admin pages and external user front-end.
      *
      * @param $slug
-     * @param $callback
+     * @param $controller
      *
      * @return \MoreSparetime\WordPress\PluginBuilder\Plugin
      * @author Andreas Glaser
      */
-    public function ajaxCallGlobal($slug, $callback)
+    public function ajaxCallGlobal($slug, $controller)
     {
         Expect::str($slug);
-        Expect::isCallable($callback);
+        Expect::isCallable($controller);
 
-        return $this->addAjaxCall(new Ajax($this, $slug, $callback, true, true));
+        return $this->addAjaxCall(new Ajax($this, $slug, $controller, true, true));
     }
 
     /**
-     * @param $callback
+     * @param $controller
      *
      * @return $this
      * @author Andreas Glaser
      */
-    public function addActivationCallback($callback)
+    public function addActivationCallback($controller)
     {
-        Expect::isCallable($callback);
+        Expect::isCallable($controller);
 
-        if (!in_array($callback, $this->activationCallbacks)) {
-            $this->activationCallbacks[] = $callback;
+        if (!in_array($controller, $this->activationCallbacks)) {
+            $this->activationCallbacks[] = $controller;
         }
 
         return $this;
     }
 
     /**
-     * @param $callback
+     * @param $controller
      *
      * @return $this
      * @author Andreas Glaser
      */
-    public function addDeactivationCallback($callback)
+    public function addDeactivationCallback($controller)
     {
-        Expect::isCallable($callback);
+        Expect::isCallable($controller);
 
-        if (!in_array($callback, $this->deactivationCallbacks)) {
-            $this->deactivationCallbacks[] = $callback;
+        if (!in_array($controller, $this->deactivationCallbacks)) {
+            $this->deactivationCallbacks[] = $controller;
         }
 
         return $this;
     }
 
     /**
-     * @param $callback
+     * @param $controller
      *
      * @return $this
      * @author Andreas Glaser
      */
-    public function addUninstallCallback($callback)
+    public function addUninstallCallback($controller)
     {
-        Expect::isCallable($callback);
+        Expect::isCallable($controller);
 
-        if (!in_array($callback, $this->uninstallCallbacks)) {
-            $this->uninstallCallbacks[] = $callback;
+        if (!in_array($controller, $this->uninstallCallbacks)) {
+            $this->uninstallCallbacks[] = $controller;
         }
 
         return $this;
@@ -339,9 +348,9 @@ class Plugin implements PluginInterface, AttachableInterface
         if ($this->translate) {
             add_action('plugins_loaded', function () {
                 load_plugin_textdomain(
-                    $this->getPrefix(),
+                    $this->getSlug(),
                     false,
-                    $this->getPrefix() . '/assets/languages/'
+                    $this->getSlug() . '/assets/languages/'
                 );
             });
         }
@@ -425,16 +434,41 @@ class Plugin implements PluginInterface, AttachableInterface
                 throw new \InvalidArgumentException(sprintf('Controller %s does not exist', $className));
             }
 
-            $this->controllers[$className] = new $className();
+            $this->controllers[$className] = new $className($this);
 
             if (!method_exists($this->controllers[$className], $method)) {
                 throw new \InvalidArgumentException(sprintf('Controller method %s does not exist', $method));
             }
 
-            $this->controllers[$className]->setPlugin($this);
-
             return call_user_func_array([$this->controllers[$className], $method], $arguments);
         };
+    }
+
+    /**
+     * @param string $relativePath
+     * @param array  $data
+     *
+     * @return \AndreasGlaser\Helpers\View\PHPView
+     * @throws \Exception
+     * @author Andreas Glaser
+     */
+    public function view($relativePath, array $data = [])
+    {
+        if (!$this->config['views_dir']) {
+            throw new \Exception('"views_dir" not defined');
+        }
+
+        $viewPath = $this->config['views_dir'] . DIRECTORY_SEPARATOR . $relativePath;
+
+        if (!is_file($viewPath)) {
+            throw new \Exception('View "%" not found', $viewPath);
+        }
+
+        if (!is_readable($viewPath)) {
+            throw new \Exception('View "%" is not readable', $viewPath);
+        }
+
+        return new PHPView($this->config['views_dir'] . DIRECTORY_SEPARATOR . $relativePath, $data);
     }
 
     /**
@@ -510,7 +544,7 @@ class Plugin implements PluginInterface, AttachableInterface
             require_once ABSPATH . 'wp-admin/includes/plugin.php';
         }
 
-        return is_plugin_active($this->prefix . '/' . $this->prefix . '.php');
+        return is_plugin_active($this->slug . '/' . $this->slug . '.php');
     }
 
     /**
@@ -521,7 +555,7 @@ class Plugin implements PluginInterface, AttachableInterface
      */
     public function getPluginPath()
     {
-        return WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . $this->getPrefix();
+        return WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . $this->getSlug();
     }
 
     /**
@@ -532,7 +566,7 @@ class Plugin implements PluginInterface, AttachableInterface
      */
     public function getPluginFilePath()
     {
-        return $this->getPluginPath() . DIRECTORY_SEPARATOR . $this->getPrefix() . '.php';
+        return $this->getPluginPath() . DIRECTORY_SEPARATOR . $this->getSlug() . '.php';
     }
 
 }

@@ -90,7 +90,7 @@ abstract class Field implements AttachableInterface
      */
     public function setSlug($slug)
     {
-        $this->slug = $this->section->getSlug() . $this->plugin->getPrefixSeparator() . $slug;
+        $this->slug = $this->section->getSlug() . $this->plugin->getSlugSeparator() . $slug;
 
         return $this;
     }

@@ -32,7 +32,7 @@ class Page
     /**
      * @var callable|null
      */
-    protected $callback;
+    protected $controller;
 
     /**
      * @var string
@@ -45,22 +45,22 @@ class Page
      * @param \MoreSparetime\WordPress\PluginBuilder\PluginInterface $plugin
      * @param string                                                 $slug
      * @param string                                                 $title
-     * @param callable|null                                          $callback
+     * @param callable|null                                          $controller
      * @param string                                                 $capability
      *
      * @author Andreas Glaser
      */
-    public function __construct(PluginInterface $plugin, $slug, $title, $callback = null, $capability = 'manage_options')
+    public function __construct(PluginInterface $plugin, $slug, $title, $controller = null, $capability = 'manage_options')
     {
         $this->setPlugin($plugin);
         $this->setSlug($slug);
         $this->title = $title;
 
-        if (!$callback) {
-            $callback = [$this, 'render'];
+        if (!$controller) {
+            $controller = [$this, 'render'];
         }
 
-        $this->callback = $callback;
+        $this->controller = $controller;
         $this->capability = $capability;
     }
 
@@ -101,9 +101,9 @@ class Page
      * @return callable
      * @author Andreas Glaser
      */
-    public function getCallback()
+    public function getController()
     {
-        return $this->callback;
+        return $this->controller;
     }
 
     /**

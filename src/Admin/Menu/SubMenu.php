@@ -56,7 +56,7 @@ class SubMenu implements AttachableInterface
                 $this->title,
                 $this->page->getCapability(),
                 $this->page->getSlug(),
-                $this->page->getCallback()
+                $this->page->getController()
             );
         });
     }
