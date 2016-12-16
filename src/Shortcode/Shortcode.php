@@ -2,10 +2,10 @@
 
 namespace MoreSparetime\WordPress\PluginBuilder\Shortcode;
 
+use AndreasGlaser\Helpers\Validate\Expect;
 use MoreSparetime\WordPress\PluginBuilder\AttachableInterface;
 use MoreSparetime\WordPress\PluginBuilder\Plugin;
 use MoreSparetime\WordPress\PluginBuilder\PluginAwareTrait;
-use MoreSparetime\WordPress\PluginBuilder\Tools\Expect;
 
 /**
  * Class Shortcode

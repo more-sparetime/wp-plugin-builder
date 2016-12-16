@@ -2,12 +2,13 @@
 
 namespace MoreSparetime\WordPress\PluginBuilder;
 
-use MoreSparetime\Helpers\ArrayHelper;
+use AndreasGlaser\Helpers\ArrayHelper;
+use AndreasGlaser\Helpers\Validate\Expect;
+use AndreasGlaser\HelpersArrayHelper;
 use MoreSparetime\WordPress\PluginBuilder\Admin\Menu\Menu;
 use MoreSparetime\WordPress\PluginBuilder\Ajax\Ajax;
 use MoreSparetime\WordPress\PluginBuilder\Cron\Cron;
 use MoreSparetime\WordPress\PluginBuilder\Shortcode\Shortcode;
-use MoreSparetime\WordPress\PluginBuilder\Tools\Expect;
 
 /**
  * Class Plugin

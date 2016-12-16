@@ -2,10 +2,10 @@
 
 namespace MoreSparetime\WordPress\PluginBuilder\Ajax;
 
+use AndreasGlaser\Helpers\Validate\Expect;
 use MoreSparetime\WordPress\PluginBuilder\AttachableInterface;
 use MoreSparetime\WordPress\PluginBuilder\PluginAwareTrait;
 use MoreSparetime\WordPress\PluginBuilder\PluginInterface;
-use MoreSparetime\WordPress\PluginBuilder\Tools\Expect;
 
 /**
  * Class Call

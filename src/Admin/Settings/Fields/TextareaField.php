@@ -2,7 +2,7 @@
 
 namespace MoreSparetime\WordPress\PluginBuilder\Admin\Settings\Fields;
 
-use MoreSparetime\Helpers\Html\FormHelper;
+use AndreasGlaser\HelpersHtml\FormHelper;
 use MoreSparetime\WordPress\PluginBuilder\Admin\Settings\Field;
 
 /**

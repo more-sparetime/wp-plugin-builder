@@ -2,11 +2,11 @@
 
 namespace MoreSparetime\WordPress\PluginBuilder\Admin;
 
-use MoreSparetime\Helpers\HtmlHelper;
+use AndreasGlaser\Helpers\HtmlHelper;
+use AndreasGlaser\Helpers\Validate\Expect;
 use MoreSparetime\WordPress\PluginBuilder\PluginAwareTrait;
 use MoreSparetime\WordPress\PluginBuilder\PluginInterface;
 use MoreSparetime\WordPress\PluginBuilder\RenderableTrait;
-use MoreSparetime\WordPress\PluginBuilder\Tools\Expect;
 
 /**
  * Class Page
