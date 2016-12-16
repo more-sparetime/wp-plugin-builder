@@ -4,9 +4,9 @@ namespace MoreSparetime\WordPress\PluginBuilder;
 
 use AndreasGlaser\Helpers\ArrayHelper;
 use AndreasGlaser\Helpers\Validate\Expect;
-use AndreasGlaser\HelpersArrayHelper;
 use MoreSparetime\WordPress\PluginBuilder\Admin\Menu\Menu;
 use MoreSparetime\WordPress\PluginBuilder\Ajax\Ajax;
+use MoreSparetime\WordPress\PluginBuilder\Controller\ControllerInterface;
 use MoreSparetime\WordPress\PluginBuilder\Cron\Cron;
 use MoreSparetime\WordPress\PluginBuilder\Shortcode\Shortcode;
 
@@ -67,6 +67,11 @@ class Plugin implements PluginInterface, AttachableInterface
      * @var bool
      */
     protected $translate = false;
+
+    /**
+     * @var array
+     */
+    protected $controllers = [];
 
     /**
      * Plugin constructor.
@@ -174,10 +179,8 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
-     * Helper
-     *
-     * @param string   $slug
-     * @param callable $callback
+     * @param $slug
+     * @param $callback
      *
      * @return \MoreSparetime\WordPress\PluginBuilder\Plugin
      * @author Andreas Glaser
@@ -187,11 +190,11 @@ class Plugin implements PluginInterface, AttachableInterface
         Expect::str($slug);
         Expect::isCallable($callback);
 
-        return $this->addShortcode(new Shortcode\Shortcode($this, $slug, $callback));
+        return $this->addShortcode(new Shortcode($this, $slug, $callback));
     }
 
     /**
-     * @param \MoreSparetime\WordPress\PluginAjax $ajax
+     * @param \MoreSparetime\WordPress\PluginBuilder\Ajax\Ajax $ajax
      *
      * @return $this
      * @author Andreas Glaser
@@ -388,6 +391,53 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
+     * Lazy load controller methods.
+     *
+     * @param $className
+     * @param $method
+     *
+     * @return \Closure
+     * @author Andreas Glaser
+     */
+    public function controller($className, $method)
+    {
+        Expect::str($className);
+        Expect::str($method);
+
+        if (!class_implements($className, ControllerInterface::class)) {
+            throw new \LogicException(sprintf('Controller "%s" does not implement "%s"', $className, ControllerInterface::class));
+        }
+
+        return function () use ($className, $method) {
+
+            $arguments = func_get_args();
+
+            if (isset($this->controllers[$className])) {
+
+                if (!method_exists($this->controllers[$className], $method)) {
+                    throw new \InvalidArgumentException(sprintf('Controller method %s does not exist', $method));
+                }
+
+                return call_user_func_array([$this->controllers[$className], $method], $arguments);
+            }
+
+            if (!class_exists($className)) {
+                throw new \InvalidArgumentException(sprintf('Controller %s does not exist', $className));
+            }
+
+            $this->controllers[$className] = new $className();
+
+            if (!method_exists($this->controllers[$className], $method)) {
+                throw new \InvalidArgumentException(sprintf('Controller method %s does not exist', $method));
+            }
+
+            $this->controllers[$className]->setPlugin($this);
+
+            return call_user_func_array([$this->controllers[$className], $method], $arguments);
+        };
+    }
+
+    /**
      * @param string $slug
      * @param null   $value
      *
@@ -484,4 +534,5 @@ class Plugin implements PluginInterface, AttachableInterface
     {
         return $this->getPluginPath() . DIRECTORY_SEPARATOR . $this->getPrefix() . '.php';
     }
+
 }
