@@ -81,6 +81,16 @@ class Plugin implements PluginInterface, AttachableInterface
         'views_dir' => null,
     ];
 
+    /**
+     * @var array
+     */
+    protected $javascripts = [];
+
+    /**
+     * @var array|
+     */
+    protected $stylesheets = [];
+
     public function __construct($prefix, array $config = [])
     {
         $this->slug = $prefix;
@@ -343,6 +353,91 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
+     * @param string      $scriptAlias
+     * @param null|string $src
+     * @param array       $deps
+     * @param bool        $ver
+     *
+     * @return $this
+     * @author Andreas Glaser
+     */
+    public function addJsHeader($scriptAlias, $src = null, $deps = [], $ver = false)
+    {
+        Expect::str($scriptAlias);
+
+        if ($src) {
+            Expect::str($src);
+        }
+
+        $this->javascripts[$scriptAlias] = [
+            'src'       => $src,
+            'deps'      => $deps,
+            'ver'       => $ver,
+            'in_footer' => false,
+        ];
+
+        return $this;
+    }
+
+    /**
+     * @param string      $scriptAlias
+     * @param null|string $src
+     * @param array       $deps
+     * @param bool        $ver
+     *
+     * @return $this
+     * @author Andreas Glaser
+     */
+    public function addJsFooter($scriptAlias, $src = null, $deps = [], $ver = false)
+    {
+        Expect::str($scriptAlias);
+
+        if ($src) {
+            Expect::str($src);
+        }
+
+        $this->javascripts[$scriptAlias] = [
+            'src'       => $src,
+            'deps'      => $deps,
+            'ver'       => $ver,
+            'in_footer' => true,
+        ];
+
+        return $this;
+    }
+
+    /**
+     * @param string $styleAlias
+     * @param string $src
+     * @param array  $deps
+     * @param bool   $ver
+     * @param string $media
+     *
+     * @return $this
+     * @author Andreas Glaser
+     */
+    public function addCss($styleAlias, $src = '', $deps = [], $ver = false, $media = 'all')
+    {
+        Expect::str($styleAlias);
+
+        if ($src) {
+            Expect::str($src);
+        }
+
+        Expect::arr($deps);
+        Expect::str($media);
+
+        $this->stylesheets[$styleAlias] = [
+            'src'   => $src,
+            'deps'  => $deps,
+            'ver'   => $ver,
+            'media' => $media,
+        ];
+
+        return $this;
+    }
+
+    /**
      * @author Andreas Glaser
      */
     public function attachHooks()
@@ -385,6 +480,14 @@ class Plugin implements PluginInterface, AttachableInterface
                 if ($shortcode instanceof AttachableInterface) {
                     $shortcode->attachHooks();
                 }
+            }
+
+            foreach ($this->javascripts AS $scriptAlias => $javascript) {
+                wp_enqueue_script($scriptAlias, $javascript['src'], $javascript['deps'], $javascript['ver'], $javascript['in_footer']);
+            }
+
+            foreach ($this->stylesheets AS $styleAlias => $stylesheet) {
+                wp_enqueue_script($styleAlias, $stylesheet['src'], $stylesheet['deps'], $stylesheet['ver'], $stylesheet['in_footer']);
             }
         }
 
