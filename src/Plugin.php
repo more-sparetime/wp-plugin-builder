@@ -487,7 +487,7 @@ class Plugin implements PluginInterface, AttachableInterface
             }
 
             foreach ($this->stylesheets AS $styleAlias => $stylesheet) {
-                wp_enqueue_script($styleAlias, $stylesheet['src'], $stylesheet['deps'], $stylesheet['ver'], $stylesheet['in_footer']);
+                wp_enqueue_script($styleAlias, $stylesheet['src'], $stylesheet['deps'], $stylesheet['ver']);
             }
         }
 
