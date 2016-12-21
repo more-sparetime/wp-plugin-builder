@@ -566,11 +566,11 @@ class Plugin implements PluginInterface, AttachableInterface
         $viewPath = $this->config['views_dir'] . DIRECTORY_SEPARATOR . $relativePath;
 
         if (!is_file($viewPath)) {
-            throw new \Exception('View "%" not found', $viewPath);
+            throw new \Exception(sprintf('View "%" not found', $viewPath));
         }
 
         if (!is_readable($viewPath)) {
-            throw new \Exception('View "%" is not readable', $viewPath);
+            throw new \Exception(sprintf('View "%" is not readable', $viewPath));
         }
 
         return new PHPView($this->config['views_dir'] . DIRECTORY_SEPARATOR . $relativePath, $data);
