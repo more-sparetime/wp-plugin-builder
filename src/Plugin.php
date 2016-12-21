@@ -712,4 +712,112 @@ class Plugin implements PluginInterface, AttachableInterface
 
         return vsprintf($string, $data);
     }
+
+    /**
+     * @return \MoreSparetime\WordPress\PluginBuilder\Admin\Menu\Menu[]
+     * @author Andreas Glaser
+     */
+    public function getMenus()
+    {
+        return $this->menus;
+    }
+
+    /**
+     * @return array|\MoreSparetime\WordPress\PluginBuilder\Shortcode\Shortcode[]
+     * @author Andreas Glaser
+     */
+    public function getShortcodes()
+    {
+        return $this->shortcodes;
+    }
+
+    /**
+     * @return \MoreSparetime\WordPress\PluginBuilder\Ajax\Ajax[]
+     * @author Andreas Glaser
+     */
+    public function getAjaxCalls()
+    {
+        return $this->ajaxCalls;
+    }
+
+    /**
+     * @return \MoreSparetime\WordPress\PluginBuilder\Cron\Cron[]
+     * @author Andreas Glaser
+     */
+    public function getCrons()
+    {
+        return $this->crons;
+    }
+
+    /**
+     * @return \callable[]
+     * @author Andreas Glaser
+     */
+    public function getActivationCallbacks()
+    {
+        return $this->activationCallbacks;
+    }
+
+    /**
+     * @return \callable[]
+     * @author Andreas Glaser
+     */
+    public function getDeactivationCallbacks()
+    {
+        return $this->deactivationCallbacks;
+    }
+
+    /**
+     * @return \callable[]
+     * @author Andreas Glaser
+     */
+    public function getUninstallCallbacks()
+    {
+        return $this->uninstallCallbacks;
+    }
+
+    /**
+     * @return bool
+     * @author Andreas Glaser
+     */
+    public function isTranslate()
+    {
+        return $this->translate;
+    }
+
+    /**
+     * @return array
+     * @author Andreas Glaser
+     */
+    public function getControllers()
+    {
+        return $this->controllers;
+    }
+
+    /**
+     * @return array
+     * @author Andreas Glaser
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @return array
+     * @author Andreas Glaser
+     */
+    public function getJavascripts()
+    {
+        return $this->javascripts;
+    }
+
+    /**
+     * @return array
+     * @author Andreas Glaser
+     */
+    public function getStylesheets()
+    {
+        return $this->stylesheets;
+    }
 }
