@@ -109,29 +109,9 @@ class Plugin implements PluginInterface, AttachableInterface
      * @return string
      * @author Andreas Glaser
      */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    /**
-     * @return string
-     * @author Andreas Glaser
-     */
     public function getSlugSeparator()
     {
         return $this->slugSeparator;
-    }
-
-    /**
-     * @return mixed
-     * @author Andreas Glaser
-     */
-    public function makeSlug(/* POLYMORPHIC */)
-    {
-        $pieces = ArrayHelper::merge([$this->slug], func_get_args());
-
-        return implode($this->slugSeparator, $pieces);
     }
 
     /**
@@ -144,36 +124,6 @@ class Plugin implements PluginInterface, AttachableInterface
     {
         if (!in_array($menu, $this->menus)) {
             $this->menus[] = $menu;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param \MoreSparetime\WordPress\PluginBuilder\Shortcode\Shortcode $shortcode
-     *
-     * @return $this
-     * @author Andreas Glaser
-     */
-    public function addShortcode(Shortcode $shortcode)
-    {
-        if (!in_array($shortcode, $this->shortcodes)) {
-            $this->shortcodes [] = $shortcode;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param \MoreSparetime\WordPress\PluginBuilder\Cron\Cron $cron
-     *
-     * @return $this
-     * @author Andreas Glaser
-     */
-    public function addCron(Cron $cron)
-    {
-        if (!in_array($cron, $this->crons)) {
-            $this->crons [] = $cron;
         }
 
         return $this;
@@ -199,6 +149,21 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
+     * @param \MoreSparetime\WordPress\PluginBuilder\Cron\Cron $cron
+     *
+     * @return $this
+     * @author Andreas Glaser
+     */
+    public function addCron(Cron $cron)
+    {
+        if (!in_array($cron, $this->crons)) {
+            $this->crons [] = $cron;
+        }
+
+        return $this;
+    }
+
+    /**
      * @param string   $slug
      * @param callable $controller
      * @param array    $context
@@ -215,15 +180,15 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
-     * @param \MoreSparetime\WordPress\PluginBuilder\Ajax\Ajax $ajax
+     * @param \MoreSparetime\WordPress\PluginBuilder\Shortcode\Shortcode $shortcode
      *
      * @return $this
      * @author Andreas Glaser
      */
-    public function addAjaxCall(Ajax $ajax)
+    public function addShortcode(Shortcode $shortcode)
     {
-        if (!in_array($ajax, $this->ajaxCalls)) {
-            $this->ajaxCalls[] = $ajax;
+        if (!in_array($shortcode, $this->shortcodes)) {
+            $this->shortcodes [] = $shortcode;
         }
 
         return $this;
@@ -248,6 +213,21 @@ class Plugin implements PluginInterface, AttachableInterface
         Expect::bool($external);
 
         return $this->addAjaxCall(new Ajax($this, $slug, $controller, $internal, $external));
+    }
+
+    /**
+     * @param \MoreSparetime\WordPress\PluginBuilder\Ajax\Ajax $ajax
+     *
+     * @return $this
+     * @author Andreas Glaser
+     */
+    public function addAjaxCall(Ajax $ajax)
+    {
+        if (!in_array($ajax, $this->ajaxCalls)) {
+            $this->ajaxCalls[] = $ajax;
+        }
+
+        return $this;
     }
 
     /**
@@ -505,6 +485,37 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
+     * @return string
+     * @author Andreas Glaser
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Returns absolute path to plugin root file.
+     *
+     * @return string
+     * @author Andreas Glaser
+     */
+    public function getPluginFilePath()
+    {
+        return $this->getPluginPath() . DIRECTORY_SEPARATOR . $this->getSlug() . '.php';
+    }
+
+    /**
+     * Returns absolute path to plugin root.
+     *
+     * @return string
+     * @author Andreas Glaser
+     */
+    public function getPluginPath()
+    {
+        return WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . $this->getSlug();
+    }
+
+    /**
      * Lazy load controller methods.
      *
      * @param $className
@@ -592,6 +603,17 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
+     * @return mixed
+     * @author Andreas Glaser
+     */
+    public function makeSlug(/* POLYMORPHIC */)
+    {
+        $pieces = ArrayHelper::merge([$this->slug], func_get_args());
+
+        return implode($this->slugSeparator, $pieces);
+    }
+
+    /**
      * @param string $slug
      * @param null   $default
      *
@@ -640,6 +662,68 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
+     * @param string $slug
+     * @param null   $arg
+     * @param null   $defaultController
+     * @param int    $priority
+     *
+     * @return $this
+     * @author Andreas Glaser
+     */
+    public function hookTriggerCustom($slug, $arg = null, $defaultController = null, $priority = 10)
+    {
+        $slug = $this->makeSlug($slug);
+
+        if ($defaultController) {
+            Expect::isCallable($defaultController);
+            $this->hookRegister($slug, $defaultController, $priority);
+        }
+
+        do_action($slug, $arg);
+
+        return $this;
+    }
+
+    /**
+     * Registeres a new callback onto
+     *
+     * @param string   $slug
+     * @param callable $controller
+     * @param int      $priority
+     * @param int      $acceptedArgs
+     *
+     * @return $this
+     * @author Andreas Glaser
+     */
+    public function hookRegister($slug, $controller, $priority = 10, $acceptedArgs = 1)
+    {
+        // todo: Use PHP Reflections to receive accepted argument count
+
+        Expect::str($slug);
+        Expect::isCallable($controller);
+
+        add_action($slug, $controller, $priority, $acceptedArgs);
+
+        return $this;
+    }
+
+    /**
+     * @param string $slug
+     * @param mixed  $arg
+     *
+     * @return $this
+     * @author Andreas Glaser
+     */
+    public function hookTrigger($slug, $arg = null)
+    {
+        Expect::str($slug);
+
+        do_action($slug, $arg);
+
+        return $this;
+    }
+
+    /**
      * @return mixed
      * @author Andreas Glaser
      */
@@ -650,39 +734,6 @@ class Plugin implements PluginInterface, AttachableInterface
         }
 
         return is_plugin_active($this->slug . '/' . $this->slug . '.php');
-    }
-
-    /**
-     * Returns absolute path to plugin root.
-     *
-     * @return string
-     * @author Andreas Glaser
-     */
-    public function getPluginPath()
-    {
-        return WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . $this->getSlug();
-    }
-
-    /**
-     * Returns absolute path to plugin root file.
-     *
-     * @return string
-     * @author Andreas Glaser
-     */
-    public function getPluginFilePath()
-    {
-        return $this->getPluginPath() . DIRECTORY_SEPARATOR . $this->getSlug() . '.php';
-    }
-
-    /**
-     * @param $string
-     *
-     * @return string|void
-     * @author Andreas Glaser
-     */
-    public function t($string)
-    {
-        return __($string, $this->getSlug());
     }
 
     /**
@@ -711,6 +762,17 @@ class Plugin implements PluginInterface, AttachableInterface
         $string = $this->t($string);
 
         return vsprintf($string, $data);
+    }
+
+    /**
+     * @param $string
+     *
+     * @return string|void
+     * @author Andreas Glaser
+     */
+    public function t($string)
+    {
+        return __($string, $this->getSlug());
     }
 
     /**
