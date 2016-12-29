@@ -662,30 +662,7 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
-     * @param string $slug
-     * @param null   $arg
-     * @param null   $defaultController
-     * @param int    $priority
-     *
-     * @return $this
-     * @author Andreas Glaser
-     */
-    public function hookTriggerCustom($slug, $arg = null, $defaultController = null, $priority = 10)
-    {
-        $slug = $this->makeSlug($slug);
-
-        if ($defaultController) {
-            Expect::isCallable($defaultController);
-            $this->hookRegister($slug, $defaultController, $priority);
-        }
-
-        do_action($slug, $arg);
-
-        return $this;
-    }
-
-    /**
-     * Registeres a new callback onto
+     * Attaches controller to existing action/filter hook.
      *
      * @param string   $slug
      * @param callable $controller
@@ -695,12 +672,18 @@ class Plugin implements PluginInterface, AttachableInterface
      * @return $this
      * @author Andreas Glaser
      */
-    public function hookRegister($slug, $controller, $priority = 10, $acceptedArgs = 1)
+    public function addAction($slug, $controller, $priority = 10, $acceptedArgs = 1)
     {
-        // todo: Use PHP Reflections to receive accepted argument count
+        global $wp_filter;
 
         Expect::str($slug);
         Expect::isCallable($controller);
+
+        if (!isset($wp_filter[$slug])) {
+            throw new \LogicException(sprintf(
+                'Action "%s" does not exist', $slug
+            ));
+        }
 
         add_action($slug, $controller, $priority, $acceptedArgs);
 
@@ -708,15 +691,83 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
+     * Adds a new action/filter hook and prefixes its name
+     *
+     * @param string   $slug
+     * @param callable $controller
+     * @param int      $priority
+     * @param int      $acceptedArgs
+     *
+     * @return \MoreSparetime\WordPress\PluginBuilder\Plugin
+     * @author Andreas Glaser
+     */
+    public function addActionCustom($slug, $controller, $priority = 10, $acceptedArgs = 1)
+    {
+        Expect::str($slug);
+        Expect::isCallable($controller);
+
+        $slug = $this->makeSlug($slug);
+
+        add_action($slug, $controller, $priority, $acceptedArgs);
+
+        return $this;
+    }
+
+    public function addActionCustomWithDefault($slug, $defaultController, $arg = null, $priority = 10, $acceptedArgs = 1)
+    {
+        $this->addActionCustom($slug, $defaultController, $priority, $acceptedArgs);
+        $this->triggerActionCustom($slug, $arg);
+
+        return $this;
+    }
+
+    /**
+     * Triggers existing action/filter hook.
+     *
      * @param string $slug
      * @param mixed  $arg
      *
      * @return $this
      * @author Andreas Glaser
      */
-    public function hookTrigger($slug, $arg = null)
+    public function triggerAction($slug, $arg = null)
     {
+        global $wp_filter;
+
         Expect::str($slug);
+
+        if (!isset($wp_filter[$slug])) {
+            throw new \LogicException(sprintf(
+                'Action "%s" does not exist', $slug
+            ));
+        }
+
+        do_action($slug, $arg);
+
+        return $this;
+    }
+
+    /**
+     * Triggers custom action/filter hook.
+     *
+     * @param string $slug
+     * @param mixed  $arg
+     *
+     * @return $this
+     * @author Andreas Glaser
+     */
+    public function triggerActionCustom($slug, $arg = null)
+    {
+        global $wp_filter;
+
+        Expect::str($slug);
+        $slug = $this->makeSlug($slug);
+
+        if (!isset($wp_filter[$slug])) {
+            throw new \LogicException(sprintf(
+                'Action "%s" does not exist', $slug
+            ));
+        }
 
         do_action($slug, $arg);
 
