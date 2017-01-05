@@ -417,6 +417,13 @@ class Plugin implements PluginInterface, AttachableInterface
         return $this;
     }
 
+    public function addWidget($name)
+    {
+        add_action( 'widgets_init', function() use ($name){
+            register_widget( '\Plugin\Widgets\\'. $name );
+        });
+    }
+
     /**
      * @author Andreas Glaser
      */
