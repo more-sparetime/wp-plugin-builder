@@ -30,6 +30,11 @@ class Plugin implements PluginInterface, AttachableInterface
     protected $slugSeparator = '_';
 
     /**
+     * @var array
+     */
+    protected $models = [];
+
+    /**
      * @var \MoreSparetime\WordPress\PluginBuilder\Admin\Menu\Menu[]
      */
     protected $menus = [];
@@ -84,6 +89,11 @@ class Plugin implements PluginInterface, AttachableInterface
     /**
      * @var array
      */
+    protected $filters =[];
+
+    /**
+     * @var array
+     */
     protected $javascripts = [];
 
     /**
@@ -102,6 +112,28 @@ class Plugin implements PluginInterface, AttachableInterface
             }
 
             PHPView::setGlobal('plugin', $this);
+        }
+
+        $this->initModels();
+    }
+
+    /**
+     * @author Xavier Sanna
+     */
+    private function initModels()
+    {
+        $path = $this->getPluginPath() . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Features' . DIRECTORY_SEPARATOR . '*';
+
+        foreach(glob($path , GLOB_ONLYDIR) AS $directory) {
+            $namespace = '\Plugin\Features\\' . basename($directory) . '\\' . 'Models' . '\\';
+
+            $subPath = $directory . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR .'*';
+
+            foreach(glob($subPath) AS $model) {
+                $name = $namespace . str_replace('.php', '',basename($model));
+
+                array_push($this->models, new $name());
+            }
         }
     }
 
@@ -833,6 +865,25 @@ class Plugin implements PluginInterface, AttachableInterface
         return __($string, $this->getSlug());
     }
 
+
+    /**
+     * Finds a model object by name and returns it
+     * @param $name
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getModel($name)
+    {
+        foreach($this->getModels() AS $model)
+        {
+            if(ucfirst($name) === array_pop(explode('\\', get_class($model)))) {
+                return $model;
+            }
+        }
+
+        throw new \Exception($name . ' model doesn\'t exists.');
+    }
+
     /**
      * @return \MoreSparetime\WordPress\PluginBuilder\Admin\Menu\Menu[]
      * @author Andreas Glaser
@@ -940,4 +991,13 @@ class Plugin implements PluginInterface, AttachableInterface
     {
         return $this->stylesheets;
     }
+
+    /**
+     * @return array
+     */
+    public function getModels()
+    {
+        return $this->models;
+    }
+
 }
