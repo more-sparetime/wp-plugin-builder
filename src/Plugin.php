@@ -814,6 +814,27 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
+     * @param $slug
+     * @param $controller
+     * @param int $priority
+     * @param int $accepted_args
+     * @return $this
+     *
+     * @author Xavier Sanna
+     */
+    public function addFilterCustom($slug, $controller, $priority = 10, $accepted_args = 1)
+    {
+        Expect::str($slug);
+        Expect::isCallable($controller);
+
+        $slug = $this->makeSlug($slug);
+
+        add_filter($slug, $controller, $priority, $accepted_args);
+
+        return $this;
+    }
+
+    /**
      * @return mixed
      * @author Andreas Glaser
      */
