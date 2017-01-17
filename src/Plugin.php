@@ -10,6 +10,7 @@ use MoreSparetime\WordPress\PluginBuilder\Ajax\Ajax;
 use MoreSparetime\WordPress\PluginBuilder\Controller\ControllerInterface;
 use MoreSparetime\WordPress\PluginBuilder\Cron\Cron;
 use MoreSparetime\WordPress\PluginBuilder\Shortcode\Shortcode;
+use MoreSparetime\WordPress\PluginBuilder\Widget\WidgetInterface;
 
 /**
  * Class Plugin
@@ -89,7 +90,7 @@ class Plugin implements PluginInterface, AttachableInterface
     /**
      * @var array
      */
-    protected $filters =[];
+    protected $filters = [];
 
     /**
      * @var array
@@ -97,10 +98,24 @@ class Plugin implements PluginInterface, AttachableInterface
     protected $javascripts = [];
 
     /**
-     * @var array|
+     * @var array
      */
     protected $stylesheets = [];
 
+    /**
+     * @var array
+     */
+    protected $widgets = [];
+
+    /**
+     * Plugin constructor.
+     *
+     * @param string $prefix
+     * @param array  $config
+     *
+     * @throws \Exception
+     * @author Andreas Glaser
+     */
     public function __construct($prefix, array $config = [])
     {
         $this->slug = $prefix;
@@ -119,18 +134,19 @@ class Plugin implements PluginInterface, AttachableInterface
 
     /**
      * @author Xavier Sanna
+     * @todo   This does not belong in the wp-plugin-builder
      */
     private function initModels()
     {
         $path = $this->getPluginPath() . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Features' . DIRECTORY_SEPARATOR . '*';
 
-        foreach(glob($path , GLOB_ONLYDIR) AS $directory) {
+        foreach (glob($path, GLOB_ONLYDIR) AS $directory) {
             $namespace = '\Plugin\Features\\' . basename($directory) . '\\' . 'Models' . '\\';
 
-            $subPath = $directory . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR .'*';
+            $subPath = $directory . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . '*';
 
-            foreach(glob($subPath) AS $model) {
-                $name = $namespace . str_replace('.php', '',basename($model));
+            foreach (glob($subPath) AS $model) {
+                $name = $namespace . str_replace('.php', '', basename($model));
 
                 array_push($this->models, new $name());
             }
@@ -449,11 +465,23 @@ class Plugin implements PluginInterface, AttachableInterface
         return $this;
     }
 
-    public function addWidget($name)
+    /**
+     * @param string|WidgetInterface $widgetClass
+     *
+     * @return $this
+     * @author Andreas Glaser
+     */
+    public function addWidget($widgetClass)
     {
-        add_action( 'widgets_init', function() use ($name){
-            register_widget( '\Plugin\Widgets\\'. $name );
-        });
+        Expect::str($widgetClass);
+
+        if (!class_implements($widgetClass, WidgetInterface::class)) {
+            throw new \LogicException(sprintf('Widget class "%s" does not implement "%s"', $widgetClass, WidgetInterface::class));
+        }
+
+        $this->widgets[] = $widgetClass;
+
+        return $this;
     }
 
     /**
@@ -521,6 +549,12 @@ class Plugin implements PluginInterface, AttachableInterface
                 $cron->attachHooks();
             }
         }
+
+        $this->addAction('widgets_init', function () {
+            foreach ($this->widgets AS $widget) {
+                register_widget($widget);
+            }
+        });
     }
 
     /**
@@ -693,6 +727,10 @@ class Plugin implements PluginInterface, AttachableInterface
         return delete_option($this->makeSlug($slug));
     }
 
+    /**
+     * @return $this
+     * @author Andreas Glaser
+     */
     public function enableTranslations()
     {
         $this->translate = true;
@@ -713,16 +751,8 @@ class Plugin implements PluginInterface, AttachableInterface
      */
     public function addAction($slug, $controller, $priority = 10, $acceptedArgs = 1)
     {
-        global $wp_filter;
-
         Expect::str($slug);
         Expect::isCallable($controller);
-
-        if (!isset($wp_filter[$slug])) {
-            throw new \LogicException(sprintf(
-                'Action "%s" does not exist', $slug
-            ));
-        }
 
         add_action($slug, $controller, $priority, $acceptedArgs);
 
@@ -752,6 +782,16 @@ class Plugin implements PluginInterface, AttachableInterface
         return $this;
     }
 
+    /**
+     * @param      $slug
+     * @param      $defaultController
+     * @param null $arg
+     * @param int  $priority
+     * @param int  $acceptedArgs
+     *
+     * @return $this
+     * @author Andreas Glaser
+     */
     public function addActionCustomWithDefault($slug, $defaultController, $arg = null, $priority = 10, $acceptedArgs = 1)
     {
         $this->addActionCustom($slug, $defaultController, $priority, $acceptedArgs);
@@ -814,10 +854,11 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
-     * @param $slug
-     * @param $controller
+     * @param     $slug
+     * @param     $controller
      * @param int $priority
      * @param int $accepted_args
+     *
      * @return $this
      *
      * @author Xavier Sanna
@@ -886,18 +927,18 @@ class Plugin implements PluginInterface, AttachableInterface
         return __($string, $this->getSlug());
     }
 
-
     /**
      * Finds a model object by name and returns it
+     *
      * @param $name
+     *
      * @return mixed
      * @throws \Exception
      */
     public function getModel($name)
     {
-        foreach($this->getModels() AS $model)
-        {
-            if(ucfirst($name) === array_pop(explode('\\', get_class($model)))) {
+        foreach ($this->getModels() AS $model) {
+            if (ucfirst($name) === array_pop(explode('\\', get_class($model)))) {
                 return $model;
             }
         }
