@@ -854,23 +854,50 @@ class Plugin implements PluginInterface, AttachableInterface
     }
 
     /**
-     * @param     $slug
-     * @param     $controller
-     * @param int $priority
-     * @param int $accepted_args
-     *
-     * @return $this
-     *
-     * @author Xavier Sanna
-     */
-    public function addFilterCustom($slug, $controller, $priority = 10, $accepted_args = 1)
+ * @param     $slug
+ * @param     $controller
+ * @param int $priority
+ * @param int $acceptedArgs
+ *
+ * @return $this
+ *
+ * @author Xavier Sanna
+ */
+    public function addFilterCustom($slug, $controller, $priority = 10, $acceptedArgs = 1)
     {
         Expect::str($slug);
         Expect::isCallable($controller);
 
         $slug = $this->makeSlug($slug);
 
-        add_filter($slug, $controller, $priority, $accepted_args);
+        add_filter($slug, $controller, $priority, $acceptedArgs);
+
+        return $this;
+    }
+
+    /**
+     * @param $slug
+     * @param $controller
+     * @param int $priority
+     * @param int $acceptedArgs
+     * @return $this
+     */
+    public function addFilter($slug, $controller, $priority = 10, $acceptedArgs = 1)
+    {
+        Expect::str($slug);
+        Expect::isCallable($controller);
+
+        add_filter($slug, $controller, $priority, $acceptedArgs);
+
+        return $this;
+    }
+
+    public function removeFilter($slug, $controller, $priority = 10)
+    {
+        Expect::str($slug);
+        Expect::isCallable($controller);
+
+        $this->removeFilter($slug, $controller, $priority);
 
         return $this;
     }
