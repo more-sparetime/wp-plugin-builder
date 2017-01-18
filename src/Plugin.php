@@ -897,7 +897,7 @@ class Plugin implements PluginInterface, AttachableInterface
         Expect::str($slug);
         Expect::isCallable($controller);
 
-        $this->removeFilter($slug, $controller, $priority);
+        remove_filter($slug, $controller, $priority);
 
         return $this;
     }
