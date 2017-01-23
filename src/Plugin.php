@@ -128,30 +128,8 @@ class Plugin implements PluginInterface, AttachableInterface
 
             PHPView::setGlobal('plugin', $this);
         }
-
-        $this->initModels();
     }
 
-    /**
-     * @author Xavier Sanna
-     * @todo   This does not belong in the wp-plugin-builder
-     */
-    private function initModels()
-    {
-        $path = $this->getPluginPath() . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Features' . DIRECTORY_SEPARATOR . '*';
-
-        foreach (glob($path, GLOB_ONLYDIR) AS $directory) {
-            $namespace = '\Plugin\Features\\' . basename($directory) . '\\' . 'Models' . '\\';
-
-            $subPath = $directory . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . '*';
-
-            foreach (glob($subPath) AS $model) {
-                $name = $namespace . str_replace('.php', '', basename($model));
-
-                array_push($this->models, new $name());
-            }
-        }
-    }
 
     /**
      * @return string
@@ -480,6 +458,28 @@ class Plugin implements PluginInterface, AttachableInterface
         }
 
         $this->widgets[] = $widgetClass;
+
+        return $this;
+    }
+
+    /**
+     * @param $slug
+     * @param $model
+     * @return $this
+     * @throws \Exception
+     *
+     * @author Xavier Sanna
+     */
+    public function addModel($slug, $model)
+    {
+        Expect::str($slug);
+        Expect::obj($model);
+
+        if(array_key_exists($slug, $this->models)) {
+            throw new \Exception("Model: '" . $slug . "' already exists.");
+        }
+
+        $this->models[$slug] = $model;
 
         return $this;
     }
@@ -957,20 +957,18 @@ class Plugin implements PluginInterface, AttachableInterface
     /**
      * Finds a model object by name and returns it
      *
-     * @param $name
-     *
+     * @param $slug
      * @return mixed
      * @throws \Exception
+     * @author Xavier Sanna
      */
-    public function getModel($name)
+    public function getModel($slug)
     {
-        foreach ($this->getModels() AS $model) {
-            if (ucfirst($name) === array_pop(explode('\\', get_class($model)))) {
-                return $model;
-            }
+        if(!array_key_exists($slug, $this->models)) {
+            throw new \Exception("'" . $slug . "' model doesn't exists.");
         }
 
-        throw new \Exception($name . ' model doesn\'t exists.');
+        return $this->models[$slug];
     }
 
     /**
